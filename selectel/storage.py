@@ -44,8 +44,8 @@ class Storage(object):
         headers = {"X-Auth-User": self.user, "X-Auth-Key": self.key}
         r = requests.get(self.url, headers=headers, verify=True)
         if r.status_code != 204:
-            raise Exception("Selectel: Unexpected status code: %s" %
-                            r.status_code)
+            raise SelectelRequestException("Selectel: Unexpected status code: %s" %
+                                           r.status_code)
         auth = self.Auth(r.headers["X-Auth-Token"],
                          r.headers["X-Storage-Url"],
                          r.headers["X-Expire-Auth-Token"])
@@ -262,3 +262,7 @@ class Container(object):
 
         for name in self.METHODS:
             setattr(self, name, make_method(name))
+
+
+class SelectelRequestException(Exception):
+    pass
